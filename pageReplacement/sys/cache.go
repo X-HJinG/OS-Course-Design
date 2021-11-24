@@ -17,11 +17,7 @@ func NewCache(size int) *Cache {
 }
 
 func (c *Cache) IsFull() bool {
-	if c.List.Len() < c.Size {
-		return false
-	} else {
-		return true
-	}
+	return c.List.Len() >= c.Size
 }
 
 func (c *Cache) ReNew(pNo int) {
