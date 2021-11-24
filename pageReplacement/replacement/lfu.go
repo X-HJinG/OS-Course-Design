@@ -23,7 +23,18 @@ func LFU(block *mysys.Block, pageSequence []int) {
 			// 判断是否命中
 			bNo, ok := cache.Get(curPage)
 			if !ok {
-				bNo = cache.RemoveFirst()
+				minFreq := 100000
+				minPno := -1
+				//按照缓存队列顺序遍历，获取访问次数最少页面（存在多个最少 保证是入队较早的页面）
+				for e := cache.List.Front(); e != nil; e = e.Next() {
+					if freq[e.Value.(int)] < minFreq {
+						minFreq = freq[e.Value.(int)]
+						minPno = e.Value.(int)
+					}
+				}
+				// 删除访问次数最少的页面
+				delete(freq, minPno)
+				bNo = cache.Remove(minPno)
 				cache.Put(curPage, bNo)
 			} else {
 				cache.ReNew(curPage) //命中则更新页号位置
