@@ -4,6 +4,7 @@ import (
 	"OS/pageReplacement/replacement"
 	mysys "OS/pageReplacement/sys"
 	"fmt"
+	"time"
 )
 
 func main() {
@@ -14,7 +15,12 @@ func main() {
 		fmt.Printf("%4d", i)
 	}
 	fmt.Printf("%8v}\n", "ISHIT")
-	replacement.Optimal(block, pageSequence)
+	// replacement.Optimal(block, pageSequence)
 	// replacement.FIFO(block, pageSequence)
 	// replacement.LRU(block, pageSequence)
+	// replacement.LFU(block, pageSequence)
+	// replacement.ClockBase(block, pageSequence)
+	replacement.ClockPlus(block, pageSequence)
+	time.Sleep(time.Hour)
+	fmt.Printf("s")
 }

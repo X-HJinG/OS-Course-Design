@@ -5,7 +5,7 @@ import "container/list"
 type Cache struct {
 	Size int
 	Map  map[int]int //[页号]块号
-	List *list.List  // 缓存队列
+	List *list.List  // 缓存队列 存放页号
 }
 
 func NewCache(size int) *Cache {

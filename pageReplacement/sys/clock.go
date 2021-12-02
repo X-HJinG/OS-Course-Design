@@ -9,7 +9,7 @@ type PageInfo struct {
 type Clock struct {
 	Size      int         //时钟大小 == 页面数量
 	Map       map[int]int //记录[页号]块号的映射
-	CycleList []PageInfo  // 用切片模拟循环队列
+	CycleList []PageInfo  // 用切片模拟循环队列 -> 存页号
 	CurLno    int         //当前访问的循环队列的位置
 }
 
@@ -41,16 +41,6 @@ func (c *Clock) Visit(pNo int) {
 	for i := 0; i < len(c.CycleList); i++ {
 		if c.CycleList[i].Pno == pNo {
 			c.CycleList[i].IsVisited = true
-			break
-		}
-	}
-}
-
-//调整修改位
-func (c *Clock) Modify(pNo int) {
-	for i := 0; i < len(c.CycleList); i++ {
-		if c.CycleList[i].Pno == pNo {
-			c.CycleList[i].IsModified = true
 			break
 		}
 	}
