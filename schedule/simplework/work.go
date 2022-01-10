@@ -5,7 +5,7 @@ import (
 	"sort"
 )
 
-type work struct {
+type PCB struct {
 	pName       string
 	arriveTime  int
 	serviceTime int
@@ -19,21 +19,21 @@ type result struct {
 	weightedTurnaroundTime float64 //带权周转时间
 }
 
-func NewWork(name string, t1 int, t2 int) *work {
-	return &work{
+func NewPCB(name string, t1 int, t2 int) *PCB {
+	return &PCB{
 		pName:       name,
 		arriveTime:  t1,
 		serviceTime: t2,
 	}
 }
 
-func NewQueue(works ...work) []work {
-	queue := make([]work, 0)
+func NewQueue(works ...PCB) []PCB {
+	queue := make([]PCB, 0)
 	queue = append(queue, works...)
 	return queue
 }
 
-func showStatus(res []work) {
+func showStatus(res []PCB) {
 	details := make(map[string]*result)
 	curTime := 0
 	for _, v := range res {

@@ -23,6 +23,8 @@ func Optimal(block *mysys.Block, pageSequence []int) {
 			if !ok {
 				flag := false
 				// 创建一个map 记录当前缓存队列的页面顺序 --- [页号]默认最近使用顺序
+				//7, 0, 1        2, 0, 3, 0, 4, 2, 3, 0, 3, 2, 1, 2, 0, 1, 7, 0, 1
+				//7:12   0 :99999   1:988888
 				record := make(map[int]int)
 				bigInt := 100000
 				for e := cache.List.Front(); e != nil; e = e.Next() {

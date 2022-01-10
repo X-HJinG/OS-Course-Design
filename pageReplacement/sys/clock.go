@@ -100,7 +100,7 @@ func (c *Clock) FindByCheckTwo() (curLno int) {
 func (c *Clock) OutAndSwap(Lno int, newPageInfo PageInfo) int {
 	//获取即将出列的队列元素的页号
 	pNo := c.CycleList[Lno].Pno
-	//若存在，则删除该页号与块号的映射，若不存在说明内存块仍有剩余
+	//若存在，则删除该页号与块号的映射，若不存在说明内存块仍有剩余(初始化时需要做此判断)
 	bNo, ok := c.Map[pNo]
 	if ok {
 		delete(c.Map, pNo)

@@ -6,9 +6,9 @@ import (
 	"sort"
 )
 
-func FCFS(works []work) {
+func FCFS(works []PCB) {
 	//根据到达时间降序排列
-	res := make([]work, 0)
+	res := make([]PCB, 0)
 	sort.Slice(works, func(i, j int) bool {
 		return works[i].arriveTime < works[j].arriveTime
 	})
@@ -20,9 +20,9 @@ func FCFS(works []work) {
 	showStatus(res)
 }
 
-func SJF(works []work) {
+func SJF(works []PCB) {
 	curTime := 0
-	res := make([]work, 0)
+	res := make([]PCB, 0)
 	//根据到达时间降序排列
 	sort.Slice(works, func(i, j int) bool {
 		return works[i].arriveTime < works[j].arriveTime
@@ -53,8 +53,8 @@ func SJF(works []work) {
 
 }
 
-func FB(works []work, isPreemptive bool) {
-	res := make([]work, 0)
+func FB(works []PCB, isPreemptive bool) {
+	res := make([]PCB, 0)
 	queues := make([]*list.List, 1, 10)
 	queues[0] = list.New()
 	sort.Slice(works, func(i, j int) bool {
@@ -83,7 +83,7 @@ func FB(works []work, isPreemptive bool) {
 				//顺序查找，队列不为空，在当前队列对作业进行一个时间片的操作
 				if queues[i].Len() != 0 {
 					e := queues[i].Front()
-					w := e.Value.(work)
+					w := e.Value.(PCB)
 					queues[i].Remove(e)
 					timeSlice := 1 << i
 					//如果一个时间片内完成任务
@@ -92,7 +92,7 @@ func FB(works []work, isPreemptive bool) {
 						res = append(res, w)
 					} else {
 						curTime += timeSlice
-						tmp := work{
+						tmp := PCB{
 							serviceTime: timeSlice,
 							arriveTime:  w.arriveTime,
 							pName:       w.pName,
@@ -139,7 +139,7 @@ func FB(works []work, isPreemptive bool) {
 			for i := 0; i < len(queues); i++ {
 				if queues[i].Len() != 0 {
 					e := queues[i].Front()
-					w := e.Value.(work)
+					w := e.Value.(PCB)
 					queues[i].Remove(e)
 					timeSlice := 1 << i
 					targetTime := w.serviceTime
@@ -168,7 +168,7 @@ func FB(works []work, isPreemptive bool) {
 					}
 					//时间片未执行完,判断是否发生中断，选择是否进入下一级队列
 					if targetTime != 0 {
-						tmp := work{
+						tmp := PCB{
 							serviceTime: w.serviceTime - targetTime,
 							arriveTime:  w.arriveTime,
 							pName:       w.pName,

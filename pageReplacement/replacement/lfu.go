@@ -4,7 +4,7 @@ import mysys "OS/pageReplacement/sys"
 
 func LFU(block *mysys.Block, pageSequence []int) {
 	cache := mysys.NewCache(block.Size)
-	freq := make(map[int]int) // 记录频次的表
+	freq := make(map[int]int) // 记录频次的表 [页号]访问次数
 	//条件为页面序列未空
 	for len(pageSequence) > 0 {
 		curPage := pageSequence[0]
@@ -25,6 +25,7 @@ func LFU(block *mysys.Block, pageSequence []int) {
 			if !ok {
 				minFreq := 100000
 				minPno := -1
+				//7, 0, 1        2, 0, 3, 0, 4, 2, 3, 0, 3, 2, 1, 2, 0, 1, 7, 0, 1
 				//按照缓存队列顺序遍历，获取访问次数最少页面（存在多个最少 保证是入队较早的页面）
 				for e := cache.List.Front(); e != nil; e = e.Next() {
 					if freq[e.Value.(int)] < minFreq {
@@ -38,8 +39,8 @@ func LFU(block *mysys.Block, pageSequence []int) {
 				cache.Put(curPage, bNo)
 			} else {
 				cache.ReNew(curPage) //命中则更新页号位置
-				freq[curPage]++
 			}
+			freq[curPage]++
 			block.ChangeBlock(bNo, curPage)
 		}
 	}
