@@ -1,7 +1,18 @@
 package mysys
 
 //进行一次预分配
-func PreDistribute(processes ProcessSequence, PID int, distribute []int, available []int) ([]Process, []int) {
+func PreDistribute(processes ProcessSequence, PID int, distribute []int, available []int) ([]Process, []int, bool) {
+	flag := true
+	//检查资源数量是否满足分配
+	for i := 0; i < len(available); i++ {
+		if available[i] < distribute[i] {
+			flag = false
+			break
+		}
+	}
+	if !flag {
+		return nil, nil, false
+	}
 	//将传递的切片进行拷贝 防止修改原先传入的变量
 	tempProcessSequence := make([]Process, len(processes))
 	tempAvailable := make([]int, len(available))
@@ -9,7 +20,7 @@ func PreDistribute(processes ProcessSequence, PID int, distribute []int, availab
 	//拷贝序列
 	copy(tempProcessSequence, processes)
 	Distribute(tempProcessSequence, PID, distribute, tempAvailable)
-	return tempProcessSequence, tempAvailable
+	return tempProcessSequence, tempAvailable, true
 }
 
 func SecurityCheck(processes ProcessSequence, available []int) (bool, []int) {

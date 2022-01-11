@@ -1,4 +1,4 @@
-package Goup
+package Group
 
 import "fmt"
 
@@ -21,13 +21,41 @@ func NewNoStack(no int, max int) *NoStack {
 
 //初始化空闲号栈
 func Init(head *NoStack, num int) {
-	for i := 1; i <= num; i++ {
-		head.add(i)
+	for i := 1; i < num; i++ {
+		head.Add(i)
+	}
+	if num%head.Max == 0 {
+		head.Add(-1)
+	} else {
+		head.Add(num)
 	}
 }
 
+//分配空闲区块 num->为分配个数
 func Distribute(head *NoStack, res *[]int, num int) {
-	(*res) = append((*res), 1, 2, 2, 3, 4, 5)
+	for i := 0; i < num; i++ {
+		hasNext, blockNo := head.Remove()
+		*res = append(*res, blockNo)
+		if !hasNext {
+			if head.NextStack != nil {
+				*head = *head.NextStack
+				i--
+			} else {
+				newStack := NewNoStack(0, head.Max)
+				*head = *newStack
+				fmt.Println("error-> out of index !!")
+				break
+			}
+		}
+	}
+}
+
+//回收号栈
+func Recycle(head *NoStack, allocatedBlock []int) {
+	for len(allocatedBlock) > 0 {
+		head.Add(allocatedBlock[0])
+		allocatedBlock = allocatedBlock[1:]
+	}
 }
 
 func PrintAll(headStack *NoStack) {
@@ -38,18 +66,41 @@ func PrintAll(headStack *NoStack) {
 	}
 }
 
-func (s *NoStack) add(blockNo int) {
-	if s.Size < len(s.Stack) {
+func (s *NoStack) Add(blockNo int) {
+	//判断是否仍有空闲位置未分配
+	if s.Size < s.Max {
 		s.Stack[s.Size] = blockNo
 		s.Size++
 	} else {
 		if s.NextStack == nil {
-			s.NextStack = NewNoStack(blockNo-1, s.Max)
+			//判断是否为终止位置
+			if s.Stack[s.Max-1] == -1 {
+				s.Stack[s.Max-1] = blockNo
+				s.NextStack = NewNoStack(blockNo, s.Max)
+				return
+			} else {
+				newStackNo := s.Stack[s.Max-1]
+				s.NextStack = NewNoStack(newStackNo, s.Max)
+			}
 		}
-		s.NextStack.add(blockNo)
+		s.NextStack.Add(blockNo)
+	}
+	//添加终止标志
+	if s.Size < s.Max {
+		s.Stack[s.Size] = -1
 	}
 }
 
+func (s *NoStack) Remove() (bool, int) {
+	//从空闲号栈顶删除一个，直到栈底
+	if len(s.Stack) > 1 {
+		blockNo := s.Stack[0]
+		s.Stack = s.Stack[1:]
+		return true, blockNo
+	}
+	return false, s.No
+}
+
 func (s *NoStack) PrintStatus() {
-	fmt.Println(s.No, ": ", s.Stack)
+	fmt.Printf("%-4d: %v\n", s.No, s.Stack)
 }

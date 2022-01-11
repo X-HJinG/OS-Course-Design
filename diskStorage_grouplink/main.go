@@ -10,10 +10,15 @@ const (
 )
 
 func main() {
-	allocatedBlock := make([]int, 0)
+	allocatedBlock := make([]int, 0, 1000)
 	headStack := Group.NewNoStack(0, N)
-	Group.Init(headStack, 110)
-	Group.Distribute(headStack, &allocatedBlock, 1)
-	fmt.Println(allocatedBlock)
-	// Group.PrintAll(headStack)
+	Group.Init(headStack, 120)
+	fmt.Println("Init:")
+	Group.PrintAll(headStack)
+	Group.Distribute(headStack, &allocatedBlock, 40)
+	fmt.Printf("\nafter distribute:\n")
+	Group.PrintAll(headStack)
+	Group.Recycle(headStack, allocatedBlock)
+	fmt.Printf("\nafter recycle:\n")
+	Group.PrintAll(headStack)
 }

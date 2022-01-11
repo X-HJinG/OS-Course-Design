@@ -22,6 +22,6 @@ func main() {
 	st.Items[2] = subsection.NewItem("70K", "5K")
 	st.Items[3] = subsection.NewItem("120K", "8K")
 	st.Items[4] = subsection.NewItem("150K", "4K")
-	section_addr := mysys.NewLogicAddrForSection(0, 137)
-	subsection.MappingToPhysical(section_addr, st)
+	sectionAddr := mysys.NewLogicAddrForSection(0, 137)
+	subsection.MappingToPhysical(sectionAddr, st)
 }
