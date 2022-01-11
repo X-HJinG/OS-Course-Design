@@ -7,28 +7,31 @@ import (
 
 var pre int
 
-func (b *block) Distribute(mode string, p *process) {
+func (b *block) Distribute(mode string, processes ...*process) {
 	var startAddr int
 	var ok bool
-	switch mode {
-	case "FF":
-		startAddr, ok = FF(b, p)
-	case "NF":
-		startAddr, ok = NF(b, p, pre)
-		if ok {
-			pre = startAddr
+	for _, p := range processes {
+		switch mode {
+		case "FF":
+			startAddr, ok = FF(b, p)
+		case "NF":
+			startAddr, ok = NF(b, p, pre)
+			if ok {
+				pre = startAddr
+			}
+		case "BF":
+			startAddr, ok = BF(b, p)
+		case "WF":
+			startAddr, ok = WF(b, p)
 		}
-	case "BF":
-		startAddr, ok = BF(b, p)
-	case "WF":
-		startAddr, ok = WF(b, p)
+		if ok {
+			setBlock(b, p, startAddr)
+			fmt.Printf("work%v---success!\n", p.pid)
+		} else {
+			fmt.Println("There isn't enough space")
+		}
 	}
-	if ok {
-		setBlock(b, p, startAddr)
-		fmt.Printf("work%v---success!\n", p.pid)
-	} else {
-		fmt.Println("There isn't enough space")
-	}
+
 }
 
 func FF(b *block, p *process) (int, bool) {
@@ -65,7 +68,11 @@ func NF(b *block, p *process, pre int) (int, bool) {
 				if p.size <= free[v] {
 					return v, true
 				} else {
-					keys = append(keys[:i], keys[i+1:]...)
+					if i+1 > len(keys) {
+						keys = keys[:i]
+					} else {
+						keys = append(keys[:i], keys[i+1:]...)
+					}
 				}
 			}
 		}

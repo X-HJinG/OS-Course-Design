@@ -18,15 +18,19 @@ func main() {
 	// sequence = append(sequence, p0, p1, p2, p3, p4)
 	sequence := mysys.NewSequence(p0, p1, p2, p3, p4)
 	resources := mysys.NewResources(1, 0, 0) //待分配资源
+	fmt.Println("Init:")
+	mysys.Display(sequence)
 	//进行预分配
-	tmpSeqence, tmpAvailable, isSuccess := mysys.PreDistribute(sequence, p3.PID, resources, available)
+	tmpSeqence, tmpAvailable, isSuccess := mysys.PreDistribute(sequence, p2.PID, resources, available)
 	if isSuccess {
 		//进行安全检测
 		isSafe, Order := mysys.SecurityCheck(tmpSeqence, tmpAvailable)
 		if isSafe {
 			fmt.Println("It's safe :", Order)
 			//真正进行分配
-			mysys.Distribute(sequence, p3.PID, resources, available)
+			mysys.Distribute(sequence, p2.PID, resources, available)
+			fmt.Printf("After distribute: %v -> %v\n", p2.PID, resources)
+			mysys.Display(sequence)
 		} else {
 			fmt.Println("It's not safe!")
 		}

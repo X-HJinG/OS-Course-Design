@@ -25,7 +25,6 @@ func LFU(block *mysys.Block, pageSequence []int) {
 			if !ok {
 				minFreq := 100000
 				minPno := -1
-				//7, 0, 1        2, 0, 3, 0, 4, 2, 3, 0, 3, 2, 1, 2, 0, 1, 7, 0, 1
 				//按照缓存队列顺序遍历，获取访问次数最少页面（存在多个最少 保证是入队较早的页面）
 				for e := cache.List.Front(); e != nil; e = e.Next() {
 					if freq[e.Value.(int)] < minFreq {

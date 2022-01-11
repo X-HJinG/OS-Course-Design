@@ -41,7 +41,7 @@ func MappingToPhysical(addr *mysys.LogicAddr, sectionTable *SectionTable) {
 			fmt.Println("error! Out of Length")
 		} else {
 			physicalAddress := m.addr + addr.Addr
-			fmt.Println("Physical Address:  ", physicalAddress)
+			fmt.Println("Section--Physical Address:  ", physicalAddress)
 		}
 	}
 }

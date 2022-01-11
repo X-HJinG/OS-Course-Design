@@ -24,6 +24,6 @@ func MappingToPhysical(addr *mysys.LogicAddr, pageSize *mysys.PageSize, table *P
 	} else {
 		d := addr.Addr % pageSize.Size //页内偏移量
 		physical := blockNo*pageSize.Size + d
-		fmt.Println("Physical Address:  ", physical)
+		fmt.Println("Pagination--Physical Address:  ", physical)
 	}
 }

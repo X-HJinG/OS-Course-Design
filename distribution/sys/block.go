@@ -62,23 +62,25 @@ func getFreeSpace(b *block, p *process) map[int]int {
 	return free
 }
 
-func (b *block) Release(pid int) {
+func (b *block) Release(pids ...int) {
 	var startAddr int
 	var size int
-loop:
-	for key, values := range b.workspace {
-		if values["pid"] == pid {
-			size = values["size"]
-			startAddr = key
-			break loop
+	for _, pid := range pids {
+	loop:
+		for key, values := range b.workspace {
+			if values["pid"] == pid {
+				size = values["size"]
+				startAddr = key
+				break loop
+			}
 		}
+		delete(b.workspace, startAddr)
+		allocation := b.allocation[startAddr : startAddr+size]
+		for i := 0; i < len(allocation); i++ {
+			allocation[i] = 0
+		}
+		fmt.Printf("work%v---release\n", pid)
 	}
-	delete(b.workspace, startAddr)
-	allocation := b.allocation[startAddr : startAddr+size]
-	for i := 0; i < len(allocation); i++ {
-		allocation[i] = 0
-	}
-	fmt.Printf("work%v---release\n", pid)
 }
 
 func (b *block) ShowWorkSpace() {
@@ -90,4 +92,5 @@ func (b *block) ShowWorkSpace() {
 	for _, key := range keys {
 		fmt.Printf("%v\n", b.workspace[key])
 	}
+	fmt.Println()
 }

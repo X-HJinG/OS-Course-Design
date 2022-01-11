@@ -8,7 +8,7 @@ import (
 )
 
 const (
-	SizeofClinders int = 40 //柱面数
+	SizeofClinders int = 10 //柱面数
 	MachineWord    int = 16 //机器字长
 	SizeofTrack    int = 4  //每个柱面的磁道数
 )

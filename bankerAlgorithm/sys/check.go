@@ -1,5 +1,10 @@
 package mysys
 
+import (
+	"bytes"
+	"encoding/gob"
+)
+
 //进行一次预分配
 func PreDistribute(processes ProcessSequence, PID int, distribute []int, available []int) ([]Process, []int, bool) {
 	flag := true
@@ -17,8 +22,15 @@ func PreDistribute(processes ProcessSequence, PID int, distribute []int, availab
 	tempProcessSequence := make([]Process, len(processes))
 	tempAvailable := make([]int, len(available))
 	copy(tempAvailable, available)
-	//拷贝序列
-	copy(tempProcessSequence, processes)
+	//深拷贝序列
+	func(dst, src interface{}) error {
+		var buffer bytes.Buffer
+		err := gob.NewEncoder(&buffer).Encode(src)
+		if err != nil {
+			return err
+		}
+		return gob.NewDecoder(bytes.NewBuffer(buffer.Bytes())).Decode(dst)
+	}(&tempProcessSequence, &processes)
 	Distribute(tempProcessSequence, PID, distribute, tempAvailable)
 	return tempProcessSequence, tempAvailable, true
 }

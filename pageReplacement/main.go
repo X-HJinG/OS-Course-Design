@@ -16,8 +16,8 @@ func main() {
 	fmt.Printf("%8v}\n", "ISHIT")
 	// replacement.Optimal(block, pageSequence)
 	// replacement.FIFO(block, pageSequence)
-	replacement.LRU(block, pageSequence)
+	// replacement.LRU(block, pageSequence)
 	// replacement.LFU(block, pageSequence)
 	// replacement.ClockBase(block, pageSequence)
-	// replacement.ClockPlus(block, pageSequence)
+	replacement.ClockPlus(block, pageSequence)
 }

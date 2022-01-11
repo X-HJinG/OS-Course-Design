@@ -1,5 +1,7 @@
 package mysys
 
+import "fmt"
+
 type Process struct {
 	PID        int
 	Max        []int
@@ -55,4 +57,15 @@ func Distribute(processes ProcessSequence, PID int, distribute []int, available 
 		processes[PID].Allocation[i] += v
 		processes[PID].Need[i] -= v
 	}
+}
+
+func Display(processes ProcessSequence) {
+	fmt.Printf("%-4v|%v|%v|%v\n", "PID", "Max", "Allocation", "Need")
+	for i := 0; i < len(processes); i++ {
+		fmt.Printf("%-4v", processes[i].PID)
+		fmt.Printf("%v", processes[i].Max)
+		fmt.Printf("%v", processes[i].Allocation)
+		fmt.Printf("%v\n", processes[i].Need)
+	}
+	fmt.Println()
 }
